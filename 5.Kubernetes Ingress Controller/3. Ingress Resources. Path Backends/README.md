@@ -91,6 +91,42 @@ Using the services you have created recently (in task #2), create **Ingress Reso
 - colors.k8slab.playpit.net/blah-blah-blah responds with olive page
 
 
+**Sollution**
+```yaml
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: colors-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  rules:
+  - host: colors.k8slab.playpit.net 
+    http:
+      paths:
+      - path: /aqua
+        pathType: Prefix
+        backend:
+          service:
+            name: aqua-svc
+            port:
+              number: 80
+      - path: /maroon
+        pathType: Prefix
+        backend:
+          service:
+            name: maroon-svc
+            port:
+              number: 80
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: olive-svc
+            port:
+              number: 80
+```
+
 **Documentation:**
 
 - https://kubernetes.io/docs/concepts/services-networking/ingress/

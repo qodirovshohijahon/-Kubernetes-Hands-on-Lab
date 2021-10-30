@@ -93,7 +93,7 @@ Rules:
 - Easier Service Domain Names resolution (Ingress Resource -> Service) within the same namespace
 - Eventual Consistency of entire application stack: all resources are running in the same namespace, and ease of deployment approach
 
-####Task
+#### Task
 
 There’re **aqua, maroon** and **olive** deployments created in default `namespace`.
 
