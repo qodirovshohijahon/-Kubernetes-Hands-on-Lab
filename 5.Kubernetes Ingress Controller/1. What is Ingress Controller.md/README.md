@@ -38,8 +38,8 @@ Q2 What is ingress-controller’s service name?
 
 
 Q3 What is the size of Replicas configured for it?
-
-
+    `nginx -v`
+    `kubectl exec --stdin --tty nginx-ingress-controller-65886f4f5d-v2wqs -n ingress-nginx -- sh` 
 Q4 What is the version of nginx web server application it is based on (X.Y.Z)?
 
 

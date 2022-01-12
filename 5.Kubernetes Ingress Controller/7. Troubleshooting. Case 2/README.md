@@ -15,6 +15,10 @@ Something failed during the deployment and now url addresses don’t work as exp
 
 Please, find the problem and fix it.
 
+**Sollution**
+    Refactored label name in service
+
+
 **Documentation:**
 - https://kubernetes.io/docs/concepts/services-networking/ingress/
 - https://cloud.google.com/kubernetes-engine/docs/concepts/ingress
