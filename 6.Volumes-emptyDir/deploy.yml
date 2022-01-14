@@ -1,0 +1,60 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: web-development-hostpath
+  name: web-development-hostpath
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: webdevelopmenthostpath
+  template:
+    metadata:
+      labels:
+        app: webdevelopmenthostpath
+    spec:
+      affinity:
+          nodeAffinity:
+            requiredDuringSchedulingIgnoredDuringExecution:
+              nodeSelectorTerms:
+              - matchExpressions:
+                - key: kubernetes.io/hostname
+                  operator: In
+                  values:
+                  - node01
+      containers:
+        - image: nginx:alpine
+          name: nginxcontainer
+          volumeMounts:
+          - mountPath: /usr/share/nginx/html
+            name: shared-node-vol
+    volumes:
+    - name: shared-node-vol
+      hostPath:
+        path: /host-data
+        type: DirectoryOrCreate
+
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: tomato
+  labels:
+    vegetable: tomato
+  name: tomato
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      vegatable: tomato
+  template:
+    metadata:
+      labels:
+        vegatable: tomato
+    spec:
+      containers:
+      - name: tomato      
+        image: nginx:1.16-alpine
+        ports:
+        - containerPort: 8080
