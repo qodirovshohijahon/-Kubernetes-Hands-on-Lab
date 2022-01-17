@@ -1,0 +1,53 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: skodirov-data-pv
+spec:
+  storageClassName: manual
+  capacity:
+    storage: 10Gi
+  accessModes:
+    - ReadWriteOnce
+  claimRef:
+    name: skodirov
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+      - matchExpressions:
+        - key: kubernetes.io/hostname
+          operator: In
+          values:
+          - node01
+  persistentVolumeReclaimPolicy: Retain
+  volumeMode: Filesystem
+status:
+  phase: Available
+
+
+
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: skodirov-data-pv
+spec:
+  storageClassName: ssd
+  capacity:
+    storage: 50Gi
+  persistentVolumeReclaimPolicy: Retain
+  accessModes:
+    - ReadWriteOnce
+
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: skodirov-data-pv-claim
+spec:
+  storageClassName: manual
+  volumeName: skodirov
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 3Gi  
+      
