@@ -1,0 +1,54 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  finalizers:
+  - kubernetes.io/pv-protection
+  name: pv-trouble
+  resourceVersion: "6847"
+  uid: 178c4c76-8177-4632-8b0f-712a7b8a944d
+spec:
+  accessModes:
+  - ReadOnlyMany
+  capacity:
+    storage: 30Mi
+  local:
+    path: /data/pv-trouble
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+      - matchExpressions:
+        - key: kubernetes.io/hostname
+          operator: In
+          values:
+          - node01
+  persistentVolumeReclaimPolicy: Retain
+  volumeMode: Filesystem
+status:
+  phase: Available
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  finalizers:
+  - kubernetes.io/pvc-protection
+  name: pv-trouble-claim
+  namespace: default
+  resourceVersion: "6848"
+  uid: ecb9d1a4-2af7-4b2b-8c73-9ffbd8a5279c
+spec:
+  accessModes:
+  - ReadWriteMany
+  resources:
+    requests:
+      storage: 30Mi
+  storageClassName: ""
+  volumeMode: Filesystem
+  volumeName: pv-trouble
+status:
+  accessModes:
+  - ReadWriteOnce
+  capacity:
+    storage: 30Mi
+  phase: Bound
+---
+#bind pvc

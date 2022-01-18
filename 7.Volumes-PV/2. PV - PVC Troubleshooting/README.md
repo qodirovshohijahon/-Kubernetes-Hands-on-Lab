@@ -50,10 +50,6 @@ status:
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  annotations:
-    kubectl.kubernetes.io/last-applied-configuration: |
-      {"apiVersion":"v1","kind":"PersistentVolumeClaim","metadata":{"annotations":{},"creationTimestamp":"2022-01-15T08:35:51Z","finalizers":["kubernetes.io/pvc-protection"],"name":"pv-trouble-claim","namespace":"default","resourceVersion":"5300","uid":"da7ebaf7-47d0-4fcf-be4c-5b36efdfb8bb"},"spec":{"accessModes":["ReadWriteMany"],"resources":{"requests":{"storage":"210Mi"}},"storageClassName":"","volumeMode":"Filesystem"},"status":{"phase":"Pending"}}
-  creationTimestamp: "2022-01-15T08:37:04Z"
   finalizers:
   - kubernetes.io/pvc-protection
   name: pv-trouble-claim
@@ -74,3 +70,96 @@ status:
 
 Documentation:
 https://kubernetes.io/docs/concepts/storage/persistent-volumes/#access-modess
+
+1. `pv-trouble.yaml`
+
+```yaml
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  finalizers:
+  - kubernetes.io/pv-protection
+  name: pv-trouble
+  resourceVersion: "6847"
+  uid: 178c4c76-8177-4632-8b0f-712a7b8a944d
+spec:
+  accessModes:
+  - ReadOnlyMany
+  capacity:
+    storage: 30Mi
+  local:
+    path: /data/pv-trouble
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+      - matchExpressions:
+        - key: kubernetes.io/hostname
+          operator: In
+          values:
+          - node01
+  persistentVolumeReclaimPolicy: Retain
+  volumeMode: Filesystem
+status:
+  phase: Available
+```
+
+2. `pv-trouble-claim.yaml`
+
+```yaml
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  finalizers:
+  - kubernetes.io/pvc-protection
+  name: pv-trouble-claim
+  namespace: default
+  resourceVersion: "6848"
+  uid: ecb9d1a4-2af7-4b2b-8c73-9ffbd8a5279c
+spec:
+  accessModes:
+  - ReadWriteMany
+  resources:
+    requests:
+      storage: 210Mi
+  volumeMode: Filesystem
+  volumeName: pv-trouble
+```
+
+### bind pv-trouble-claim to pv-trouble
+
+***Sollution**
+
+```yaml
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  finalizers:
+  - kubernetes.io/pvc-protection
+  name: pv-trouble-claim
+  namespace: default
+  resourceVersion: "1526"
+  uid: dd4eccdc-cfc0-4d44-bbbb-da72dcd1d63e
+spec:
+  accessModes:
+  - ReadOnlyMany
+  resources:
+    requests:
+      storage: 30Mi
+  volumeMode: Filesystem
+  volumeName: pv-trouble
+status:
+  accessModes:
+  - ReadOnlyMany
+  capacity:
+    storage: 30Mi
+  phase: Bound
+```
+
+![](./../img/Screenshot%20from%202022-01-18%2014-55-36.png)
+
+**Links**
+
+- https://intl.cloud.tencent.com/document/product/457/37770
+- https://stackoverflow.com/questions/34282704/can-a-pvc-be-bound-to-a-specific-pv
+- https://loft.sh/blog/kubernetes-persistent-volumes-examples-and-best-practices/
+- 

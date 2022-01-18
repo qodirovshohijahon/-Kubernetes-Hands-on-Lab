@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: mysql-db
+  name: mysql-db
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mysql-db
+  template:
+    metadata:
+      labels:
+        app: mysql-db
+    spec:
+      containers:
+      - image: mysql:8
+        name: mysql
+        env:
+        - name: MYSQL_RANDOM_ROOT_PASSWORD
+          value: "true"
+        - name: MYSQL_DATABASE
+          value: "production"
+        - name: MYSQL_USER
+          value: "skdorirov"
+        - name: MYSQL_PASSWORD
+          value: "pAssw0rd"
+        ports:
+        - ... 3306
+        volumeMounts:
+        - ... /var/lib/mysql
+      volumes:
+      - name: data
+        persistentVolumeClaim:
+            claimName: mysql-data-claim
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mysql-data-claim
+spec:
+  ...
+
+
+---
+# create PV named: mysql-data mountPath: /var/lib/mysql
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: mysql-data
+
